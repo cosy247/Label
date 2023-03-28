@@ -7,34 +7,37 @@ const PORT = 3000;
 http.createServer((req, res) => {
     
     const [pathString, queryString = ''] = req.url.split('?');
-    const [componentName, ...sizeAndTheme] = pathString.split('/').slice(1);
+    const [componentName, theme, size] = pathString.split('/').slice(1);
 
     // 提取尺寸和主题
-    let size = undefined;
-    let theme = undefined;
-    console.log('sizeAndTheme',sizeAndTheme);
-    if (sizeAndTheme.length === 1) {
-        if (isNaN(sizeAndTheme[0])) {
-            theme = sizeAndTheme[0];
-        } else {
-            size = sizeAndTheme[0];
-        }
-    } else if (sizeAndTheme.length === 2) {
-        if (isNaN(sizeAndTheme[0])) {
-            theme = sizeAndTheme[0];
-            size = sizeAndTheme[1];
-        } else {
-            size = sizeAndTheme[0];
-            theme = sizeAndTheme[1];
-        }
-    }
+    // let size = undefined;
+    // let theme = undefined;
+    // console.log('sizeAndTheme',sizeAndTheme);
+    // if (sizeAndTheme.length === 1) {
+    //     if (isNaN(sizeAndTheme[0])) {
+    //         theme = sizeAndTheme[0];
+    //     } else {
+    //         size = sizeAndTheme[0];
+    //     }
+    // } else if (sizeAndTheme.length === 2) {
+    //     if (isNaN(sizeAndTheme[0])) {
+    //         theme = sizeAndTheme[0];
+    //         size = sizeAndTheme[1];
+    //     } else {
+    //         size = sizeAndTheme[0];
+    //         theme = sizeAndTheme[1];
+    //     }
+    // }
 
     // 提取参数
     const querys = queryString.split('&').reduce((querys, query) => {
+        if (query == '') return querys;
         const [key, value] = query.split('=');
         querys[key] = value;
         return querys;
-    }, { size, theme });
+    }, { theme, size : size > 0 ? size : undefined });
+
+    console.log(querys);
 
     // 返回svg数据
     res.writeHead(200, { 'Content-Type': 'image/svg+xml; charset=utf-8' });
