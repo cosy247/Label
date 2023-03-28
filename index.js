@@ -5,12 +5,14 @@ const HOSTNAME = '127.0.0.1';
 const PORT = 3000;
 
 http.createServer((req, res) => {
+    
     const [pathString, queryString = ''] = req.url.split('?');
     const [componentName, ...sizeAndTheme] = pathString.split('/').slice(1);
 
     // 提取尺寸和主题
     let size = undefined;
     let theme = undefined;
+    console.log('sizeAndTheme',sizeAndTheme);
     if (sizeAndTheme.length === 1) {
         if (isNaN(sizeAndTheme[0])) {
             theme = sizeAndTheme[0];
@@ -37,6 +39,9 @@ http.createServer((req, res) => {
     // 返回svg数据
     res.writeHead(200, { 'Content-Type': 'image/svg+xml; charset=utf-8' });
     res.end(components[componentName] ? components[componentName](querys) : components.default(querys));
+
 }).listen(PORT, HOSTNAME, () => {
+
     console.log(`服务器运行在 http://${HOSTNAME}:${PORT}/`);
+
 });
