@@ -7,27 +7,12 @@ const PORT = 3000;
 http.createServer((req, res) => {
     
     const [pathString, queryString = ''] = req.url.split('?');
-    const [componentName, theme, size] = pathString.split('/').slice(1);
+
+    // 提取路径中参数。一级为组件名，耳机为主题和大小，以‘-’隔开（theme-size）：/label/theme1-200?... 
+    const [componentName, themeAndSize] = pathString.split('/').slice(1);
 
     // 提取尺寸和主题
-    // let size = undefined;
-    // let theme = undefined;
-    // console.log('sizeAndTheme',sizeAndTheme);
-    // if (sizeAndTheme.length === 1) {
-    //     if (isNaN(sizeAndTheme[0])) {
-    //         theme = sizeAndTheme[0];
-    //     } else {
-    //         size = sizeAndTheme[0];
-    //     }
-    // } else if (sizeAndTheme.length === 2) {
-    //     if (isNaN(sizeAndTheme[0])) {
-    //         theme = sizeAndTheme[0];
-    //         size = sizeAndTheme[1];
-    //     } else {
-    //         size = sizeAndTheme[0];
-    //         theme = sizeAndTheme[1];
-    //     }
-    // }
+    const [theme, size] = themeAndSize.split('-');
 
     // 提取参数
     const querys = queryString.split('&').reduce((querys, query) => {
@@ -36,8 +21,6 @@ http.createServer((req, res) => {
         querys[key] = value;
         return querys;
     }, { theme, size : size > 0 ? size : undefined });
-
-    console.log(querys);
 
     // 返回svg数据
     res.writeHead(200, { 'Content-Type': 'image/svg+xml; charset=utf-8' });
