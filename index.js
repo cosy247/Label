@@ -12,7 +12,7 @@ http.createServer((req, res) => {
     const [componentName, themeAndSize] = pathString.split('/').slice(1);
 
     // 提取尺寸和主题
-    const [theme, size] = themeAndSize.split('-');
+    const [theme, size] = themeAndSize ? themeAndSize.split('-') : [];
 
     // 提取参数
     const querys = queryString.split('&').reduce((querys, query) => {
